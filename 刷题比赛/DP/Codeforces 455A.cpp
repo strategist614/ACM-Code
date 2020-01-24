@@ -1,0 +1,46 @@
+/*
+  独立思考
+  一个题不会做，收获5%，写了代码10%，提交对了30%，总结吃透了这个题才是100%.
+*/
+#include<bits/stdc++.h>
+using namespace std;
+template <typename T>
+void read(T &x)
+{
+	x = 0;
+	char c = getchar();
+	int sgn = 1;
+	while (c < '0' || c > '9') {if (c == '-')sgn = -1; c = getchar();}
+	while (c >= '0' && c <= '9')x = x * 10 + c - '0', c = getchar();
+	x *= sgn;
+}
+template <typename T>
+void out(T x)
+{
+	if (x < 0) {putchar('-'); x = -x;}
+	if (x >= 10)out(x / 10);
+	putchar(x % 10 + '0');
+}
+typedef long long ll;
+typedef unsigned long long ull;
+ll gcd(ll a, ll b) { return b ? gcd(b, a % b) : a;}
+const int N = 1e5 + 5;
+int a[N];
+int num[N];
+ll f[N];
+int main ()
+{
+	//freopen("input.in", "r", stdin);
+	//freopen("test.out", "w", stdout);
+	int n;
+	read(n);
+	int maxn = 0;
+	for (int i = 1; i <= n; i++) {read(a[i]); maxn = max(maxn, a[i]);num[a[i]]++;}
+	f[0] = 0;
+	f[1] = num[1];
+	for (int i = 2; i <= maxn; i++) {
+		f[i] = max(f[i - 1], f[i - 2] + (ll)num[i] * i);
+	}
+	cout << f[maxn] << endl;
+	return 0 ;
+}

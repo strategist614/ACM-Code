@@ -1,0 +1,94 @@
+/*
+  独立思考
+  一个题不会做，收获5%，写了代码10%，提交对了30%，总结吃透了这个题才是100%.
+*/
+#include<bits/stdc++.h>
+using namespace std;
+template <typename T>
+void read(T &x)
+{
+	x = 0;
+	char c = getchar();
+	int sgn = 1;
+	while (c < '0' || c > '9') {if (c == '-')sgn = -1; c = getchar();}
+	while (c >= '0' && c <= '9')x = x * 10 + c - '0', c = getchar();
+	x *= sgn;
+}
+template <typename T>
+void out(T x)
+{
+	if (x < 0) {putchar('-'); x = -x;}
+	if (x >= 10)out(x / 10);
+	putchar(x % 10 + '0');
+}
+typedef long long ll;
+typedef unsigned long long ull;
+ll gcd(ll a, ll b) { return b ? gcd(b, a % b) : a;}
+typedef pair<int, int> pii;
+const int N = 1e4 + 5;
+struct rec { int x, y, z; } edge[500010];
+int fa[100010], n, m, ans;
+bool operator <(rec a, rec b) {
+	return a.z < b.z;
+}
+int get(int x) {
+	if (x == fa[x]) return x;
+	return fa[x] = get(fa[x]);
+}
+int main() {
+	read(n);
+	read(m);
+	for (int i = 1; i <= m; i++)
+		scanf("%d%d%d", &edge[i].x, &edge[i].y, &edge[i].z);
+	sort(edge + 1, edge + m + 1);
+	int s, t;
+	read(s);
+	read(t);
+	int maxn = 1e9;
+	int minn = 1;
+	int flag = 0;
+	for (int i = m; i >= 1; i--)
+	{
+		for (int j = 1; j <= n; j++)
+			fa[j] = j;
+		int a = edge[i].z;
+		int b = 0;
+		for (int j = i; j >= 1; j--)
+		{
+			int x = get(edge[j].x);
+			int y = get(edge[j].y);
+			fa[x] = y;
+			if (get(s) == get(t))
+			{
+				flag = 1;
+				b = edge[j].z;
+				break;
+			}
+		}
+		if (b)
+		{
+			if ((double) a / b < (double) maxn / minn)
+			{
+				maxn = a;
+				minn = b;
+			}
+		}
+	}
+	if (flag)
+	{
+		if (maxn % minn == 0)
+		{
+			cout << maxn / minn << endl;
+		}
+		else
+		{
+			int yz = gcd(maxn, minn);
+			cout << maxn / yz << "/" << minn / yz << endl;
+		}
+	}
+	else
+	{
+		cout << "IMPOSSIBLE" << endl;
+	}
+	return 0 ;
+}
